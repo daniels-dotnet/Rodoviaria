@@ -1,0 +1,36 @@
+CREATE DATABASE Rodoviaria;
+GO
+
+USE Rodoviaria;
+GO
+
+CREATE TABLE Empresas
+(
+	Id INT IDENTITY,
+	Nome VARCHAR(30) NOT NULL,
+	CONSTRAINT PK_Empresas PRIMARY KEY(Id)
+);
+GO
+
+CREATE TABLE Motoristas
+(
+	Id INT IDENTITY,
+	Nome VARCHAR(40) NOT NULL,
+	Idade INT NOT NULL,
+	Sexo CHAR(1) NOT NULL,
+	Salario MONEY NOT NULL,
+	CONSTRAINT PK_Motoristas PRIMARY KEY(Id)
+);
+GO
+
+CREATE TABLE Onibus
+(
+	Id INT IDENTITY,
+	EmpresaId INT NOT NULL,
+	MotoristaId INT NOT NULL,
+	Trajeto VARCHAR(40) NOT NULL,
+	CONSTRAINT PK_Onibus PRIMARY KEY(Id),
+	CONSTRAINT FK_Onibus_Empresas FOREIGN KEY(EmpresaId) REFERENCES Empresas(Id),
+	CONSTRAINT FK_Onibus_Motoristas FOREIGN KEY(MotoristaId) REFERENCES Motoristas(Id)
+);
+GO
