@@ -4,7 +4,7 @@ object frmOnibus: TfrmOnibus
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Cadastro de '#212'nibus'
-  ClientHeight = 269
+  ClientHeight = 299
   ClientWidth = 792
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -17,11 +17,39 @@ object frmOnibus: TfrmOnibus
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 16
+  object Label1: TLabel
+    Left = 10
+    Top = 13
+    Width = 11
+    Height = 16
+    Caption = 'Id'
+  end
+  object Label2: TLabel
+    Left = 89
+    Top = 13
+    Width = 42
+    Height = 16
+    Caption = 'Trajeto'
+  end
+  object Label4: TLabel
+    Left = 10
+    Top = 44
+    Width = 53
+    Height = 16
+    Caption = 'Motorista'
+  end
+  object Label6: TLabel
+    Left = 334
+    Top = 44
+    Width = 50
+    Height = 16
+    Caption = 'Empresa'
+  end
   object grdOnibus: TDBGrid
     Left = 10
-    Top = 10
+    Top = 100
     Width = 772
-    Height = 210
+    Height = 150
     DataSource = dtsOnibus
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
     TabOrder = 1
@@ -57,12 +85,58 @@ object frmOnibus: TfrmOnibus
   end
   object btnFechar: TBitBtn
     Left = 10
-    Top = 230
+    Top = 260
     Width = 75
     Height = 25
     Caption = 'Fechar'
     TabOrder = 0
     OnClick = btnFecharClick
+  end
+  object edtId: TEdit
+    Left = 25
+    Top = 10
+    Width = 50
+    Height = 24
+    Color = clBtnFace
+    Enabled = False
+    TabOrder = 2
+  end
+  object edtTrajeto: TEdit
+    Left = 134
+    Top = 10
+    Width = 290
+    Height = 24
+    Color = clWhite
+    TabOrder = 3
+  end
+  object btnInserir: TBitBtn
+    Left = 10
+    Top = 70
+    Width = 75
+    Height = 25
+    Caption = 'Inserir'
+    TabOrder = 4
+    OnClick = btnInserirClick
+  end
+  object cmbMotorista: TComboBox
+    Left = 67
+    Top = 40
+    Width = 250
+    Height = 24
+    Style = csDropDownList
+    ItemHeight = 16
+    TabOrder = 5
+    OnChange = cmbMotoristaChange
+  end
+  object cmbEmpresa: TComboBox
+    Left = 387
+    Top = 40
+    Width = 250
+    Height = 24
+    Style = csDropDownList
+    ItemHeight = 16
+    TabOrder = 6
+    OnChange = cmbEmpresaChange
   end
   object qryOnibus: TADOQuery
     Connection = frmMenu.cnnConexao
@@ -83,7 +157,7 @@ object frmOnibus: TfrmOnibus
       'ORDER BY'
       #9'Onibus.Trajeto')
     Left = 144
-    Top = 24
+    Top = 192
     object qryOnibusId: TAutoIncField
       FieldName = 'Id'
       ReadOnly = True
@@ -104,6 +178,12 @@ object frmOnibus: TfrmOnibus
   object dtsOnibus: TDataSource
     DataSet = qryOnibus
     Left = 176
-    Top = 24
+    Top = 192
+  end
+  object qryAuxiliar: TADOQuery
+    Connection = frmMenu.cnnConexao
+    Parameters = <>
+    Left = 144
+    Top = 144
   end
 end
