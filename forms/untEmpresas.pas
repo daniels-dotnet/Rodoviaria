@@ -118,15 +118,33 @@ begin
   qryAuxiliar.SQL.Text := 'UPDATE Empresas SET Nome = :nome WHERE Id = :id';
   qryAuxiliar.Parameters.ParamByName('nome').Value := edtNome.Text;
   qryAuxiliar.Parameters.ParamByName('id').Value := EmpresaId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryEmpresas.Close();
-  qryEmpresas.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+      HouveErro := True;
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
-  edtId.Clear();
-  edtNome.Clear();  
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryEmpresas.Close();
+    qryEmpresas.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+    edtId.Clear();
+    edtNome.Clear();
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 procedure TfrmEmpresas.btnExcluirClick(Sender: TObject);
