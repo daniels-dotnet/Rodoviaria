@@ -20,12 +20,14 @@ type
     btnInserir: TBitBtn;
     btnAlterar: TBitBtn;
     btnSalvarAlteracoes: TBitBtn;
+    btnExcluir: TBitBtn;
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnInserirClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnSalvarAlteracoesClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
   private
   public
   end;
@@ -106,6 +108,21 @@ begin
   ShowMessage('Operação executada com sucesso!');
   edtId.Clear();
   edtNome.Clear();  
+end;
+
+procedure TfrmEmpresas.btnExcluirClick(Sender: TObject);
+begin
+  EmpresaId := qryEmpresas.FieldByName('Id').AsInteger;
+  frmMenu.cnnConexao.BeginTrans();
+  qryAuxiliar.SQL.Text := 'DELETE FROM Empresas WHERE Id = :id';
+  qryAuxiliar.Parameters.ParamByName('id').Value := EmpresaId;
+  qryAuxiliar.ExecSQL();
+  frmMenu.cnnConexao.CommitTrans();
+
+  qryEmpresas.Close();
+  qryEmpresas.Open();
+
+  ShowMessage('Operação executada com sucesso!');
 end;
 
 end.
