@@ -18,16 +18,21 @@ type
     edtNome: TEdit;
     qryAuxiliar: TADOQuery;
     btnInserir: TBitBtn;
+    btnAlterar: TBitBtn;
+    btnSalvarAlteracoes: TBitBtn;
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnInserirClick(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnSalvarAlteracoesClick(Sender: TObject);
   private
   public
   end;
 
 var
   frmEmpresas: TfrmEmpresas;
+  EmpresaId : Integer;
 
 implementation
 
@@ -71,6 +76,36 @@ begin
   ShowMessage('Operação executada com sucesso!');
   edtId.Clear();
   edtNome.Clear();
+end;
+
+procedure TfrmEmpresas.btnAlterarClick(Sender: TObject);
+begin
+  EmpresaId := qryEmpresas.FieldByName('Id').AsInteger;
+  edtId.Text := IntToStr(EmpresaId);
+  edtNome.Text := qryEmpresas.FieldByName('Nome').AsString;
+end;
+
+procedure TfrmEmpresas.btnSalvarAlteracoesClick(Sender: TObject);
+begin
+  if (Trim(edtNome.Text) = '') then
+  begin
+    ShowMessage('Preencha o campo nome!');
+    Exit;
+  end;
+
+  frmMenu.cnnConexao.BeginTrans();
+  qryAuxiliar.SQL.Text := 'UPDATE Empresas SET Nome = :nome WHERE Id = :id';
+  qryAuxiliar.Parameters.ParamByName('nome').Value := edtNome.Text;
+  qryAuxiliar.Parameters.ParamByName('id').Value := EmpresaId;
+  qryAuxiliar.ExecSQL();
+  frmMenu.cnnConexao.CommitTrans();
+
+  qryEmpresas.Close();
+  qryEmpresas.Open();
+
+  ShowMessage('Operação executada com sucesso!');
+  edtId.Clear();
+  edtNome.Clear();  
 end;
 
 end.
