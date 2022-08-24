@@ -47,6 +47,7 @@ var
   MotoristaId : Integer;
   EmpresaId : Integer;
   OnibusId : Integer;
+  HouveErro : Boolean;
 
 implementation
 
@@ -118,17 +119,35 @@ begin
   qryAuxiliar.Parameters.ParamByName('trajeto').Value := edtTrajeto.Text;
   qryAuxiliar.Parameters.ParamByName('motoristaId').Value := MotoristaId;
   qryAuxiliar.Parameters.ParamByName('empresaId').Value := EmpresaId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryOnibus.Close();
-  qryOnibus.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
-  edtId.Clear();
-  edtTrajeto.Clear();
-  cmbMotorista.ItemIndex := -1;
-  cmbEmpresa.ItemIndex := -1;
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryOnibus.Close();
+    qryOnibus.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+    edtId.Clear();
+    edtTrajeto.Clear();
+    cmbMotorista.ItemIndex := -1;
+    cmbEmpresa.ItemIndex := -1;
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 procedure TfrmOnibus.cmbMotoristaChange(Sender: TObject);
