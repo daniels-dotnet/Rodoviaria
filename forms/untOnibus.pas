@@ -26,12 +26,16 @@ type
     cmbMotorista: TComboBox;
     Label6: TLabel;
     cmbEmpresa: TComboBox;
+    btnAlterar: TBitBtn;
+    btnSalvarAlteracoes: TBitBtn;
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnInserirClick(Sender: TObject);
     procedure cmbMotoristaChange(Sender: TObject);
     procedure cmbEmpresaChange(Sender: TObject);
+    procedure btnAlterarClick(Sender: TObject);
+    procedure btnSalvarAlteracoesClick(Sender: TObject);
   private
   public
   end;
@@ -40,6 +44,7 @@ var
   frmOnibus: TfrmOnibus;
   MotoristaId : Integer;
   EmpresaId : Integer;
+  OnibusId : Integer;
 
 implementation
 
@@ -140,6 +145,57 @@ begin
   qryAuxiliar.Open();
   EmpresaId := qryAuxiliar.FieldByName('Id').AsInteger;
   qryAuxiliar.Close();
+end;
+
+procedure TfrmOnibus.btnAlterarClick(Sender: TObject);
+begin
+  OnibusId := qryOnibus.FieldByName('Id').AsInteger;
+  edtId.Text := IntToStr(OnibusId);
+  edtTrajeto.Text := qryOnibus.FieldByName('Trajeto').AsString;
+  cmbMotorista.Text := qryOnibus.FieldByName('Motorista').AsString;
+  cmbMotoristaChange(Sender);
+  cmbEmpresa.Text := qryOnibus.FieldByName('Empresa').AsString;
+  cmbMotoristaChange(Sender);
+end;
+
+procedure TfrmOnibus.btnSalvarAlteracoesClick(Sender: TObject);
+begin
+  if (Trim(edtTrajeto.Text) = '') then
+  begin
+    ShowMessage('Preencha o campo trajeto!');
+    Exit;
+  end;
+
+  if (cmbMotorista.ItemIndex = -1) then
+  begin
+    ShowMessage('Preencha o campo motorista!');
+    Exit;
+  end;
+
+  if (cmbEmpresa.ItemIndex = -1) then
+  begin
+    ShowMessage('Preencha o campo empresa!');
+    Exit;
+  end;
+
+  frmMenu.cnnConexao.BeginTrans();
+  qryAuxiliar.SQL.Text := 'UPDATE Onibus SET Trajeto = :trajeto, MotoristaId = ' +
+    ':motoristaId, EmpresaId = :empresaId WHERE Id = :id';
+  qryAuxiliar.Parameters.ParamByName('trajeto').Value := edtTrajeto.Text;
+  qryAuxiliar.Parameters.ParamByName('motoristaId').Value := MotoristaId;
+  qryAuxiliar.Parameters.ParamByName('empresaId').Value := EmpresaId;
+  qryAuxiliar.Parameters.ParamByName('id').Value := OnibusId;
+  qryAuxiliar.ExecSQL();
+  frmMenu.cnnConexao.CommitTrans();
+
+  qryOnibus.Close();
+  qryOnibus.Open();
+
+  ShowMessage('Operação executada com sucesso!');
+  edtId.Clear();
+  edtTrajeto.Clear();
+  cmbMotorista.ItemIndex := -1;
+  cmbEmpresa.ItemIndex := -1;
 end;
 
 end.

@@ -123,7 +123,6 @@ object frmOnibus: TfrmOnibus
     Top = 40
     Width = 250
     Height = 24
-    Style = csDropDownList
     ItemHeight = 16
     TabOrder = 5
     OnChange = cmbMotoristaChange
@@ -133,10 +132,27 @@ object frmOnibus: TfrmOnibus
     Top = 40
     Width = 250
     Height = 24
-    Style = csDropDownList
     ItemHeight = 16
     TabOrder = 6
     OnChange = cmbEmpresaChange
+  end
+  object btnAlterar: TBitBtn
+    Left = 90
+    Top = 70
+    Width = 75
+    Height = 25
+    Caption = 'Alterar'
+    TabOrder = 7
+    OnClick = btnAlterarClick
+  end
+  object btnSalvarAlteracoes: TBitBtn
+    Left = 170
+    Top = 70
+    Width = 150
+    Height = 25
+    Caption = 'Salvar Altera'#231#245'es'
+    TabOrder = 8
+    OnClick = btnSalvarAlteracoesClick
   end
   object qryOnibus: TADOQuery
     Connection = frmMenu.cnnConexao
