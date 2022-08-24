@@ -217,13 +217,35 @@ begin
   frmMenu.cnnConexao.BeginTrans();
   qryAuxiliar.SQL.Text := 'DELETE FROM Motoristas WHERE Id = :id';
   qryAuxiliar.Parameters.ParamByName('id').Value := MotoristaId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryMotoristas.Close();
-  qryMotoristas.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
 
-  ShowMessage('Operação executada com sucesso!');
+      if frmMenu.ErroBD(E.Message, 'FK_Onibus_Motoristas') = 'Sim' then
+        ShowMessage('Impossível excluir pois existem Ônibus ligados a este Motorista!')
+      else
+        ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
+
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryMotoristas.Close();
+    qryMotoristas.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 end.
