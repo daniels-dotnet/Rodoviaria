@@ -33,6 +33,7 @@ object frmMenu: TfrmMenu
     Height = 25
     Caption = 'Motoristas'
     TabOrder = 1
+    OnClick = btnMotoristasClick
   end
   object btnOnibus: TBitBtn
     Left = 50
@@ -52,6 +53,7 @@ object frmMenu: TfrmMenu
     OnClick = btnFecharClick
   end
   object cnnConexao: TADOConnection
+    Connected = True
     ConnectionString = 
       'Provider=SQLOLEDB.1;Password=123;Persist Security Info=True;User' +
       ' ID=sa;Initial Catalog=Rodoviaria;Data Source=DANIEL-PC\MSSQL201' +

@@ -17,6 +17,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnEmpresasClick(Sender: TObject);
+    procedure btnMotoristasClick(Sender: TObject);
   private
   public
   end;
@@ -26,7 +27,7 @@ var
 
 implementation
 
-uses untEmpresas;
+uses untEmpresas, untMotoristas;
 
 {$R *.dfm}
 
@@ -48,6 +49,11 @@ end;
 procedure TfrmMenu.btnEmpresasClick(Sender: TObject);
 begin
   frmEmpresas.ShowModal();
+end;
+
+procedure TfrmMenu.btnMotoristasClick(Sender: TObject);
+begin
+  frmMotoristas.ShowModal();
 end;
 
 end.
