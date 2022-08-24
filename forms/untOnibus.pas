@@ -243,13 +243,31 @@ begin
   frmMenu.cnnConexao.BeginTrans();
   qryAuxiliar.SQL.Text := 'DELETE FROM Onibus WHERE Id = :id';
   qryAuxiliar.Parameters.ParamByName('id').Value := OnibusId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryOnibus.Close();
-  qryOnibus.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryOnibus.Close();
+    qryOnibus.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 end.
