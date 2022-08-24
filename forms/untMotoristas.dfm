@@ -125,6 +125,24 @@ object frmMotoristas: TfrmMotoristas
     Color = clWhite
     TabOrder = 6
   end
+  object btnAlterar: TBitBtn
+    Left = 90
+    Top = 40
+    Width = 75
+    Height = 25
+    Caption = 'Alterar'
+    TabOrder = 8
+    OnClick = btnAlterarClick
+  end
+  object btnSalvarAlteracoes: TBitBtn
+    Left = 170
+    Top = 40
+    Width = 150
+    Height = 25
+    Caption = 'Salvar Altera'#231#245'es'
+    TabOrder = 9
+    OnClick = btnSalvarAlteracoesClick
+  end
   object qryMotoristas: TADOQuery
     Connection = frmMenu.cnnConexao
     CursorType = ctStatic
