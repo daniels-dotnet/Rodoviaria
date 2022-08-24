@@ -21,6 +21,7 @@ type
     procedure btnOnibusClick(Sender: TObject);
   private
   public
+    function ErroBD(Msg: string; Texto: string):string;
   end;
 
 var
@@ -60,6 +61,29 @@ end;
 procedure TfrmMenu.btnOnibusClick(Sender: TObject);
 begin
   frmOnibus.ShowModal();
+end;
+
+function TfrmMenu.ErroBD(Msg, Texto: string): string;
+var
+  I : Integer;
+  TamanhoMensagem : Integer;
+  TamanhoTexto : Integer;
+  Pedaco : string;
+begin
+  TamanhoMensagem := Length(msg);
+  TamanhoTexto := Length(texto);
+  Result := 'Não';
+  
+  for I := 0 to TamanhoMensagem do
+  begin
+    Pedaco := Copy(Msg, I, TamanhoTexto);
+
+    if Pedaco = Texto then
+    begin
+      Result := 'Sim';
+      Break;
+    end;
+  end;
 end;
 
 end.

@@ -35,6 +35,7 @@ type
 var
   frmEmpresas: TfrmEmpresas;
   EmpresaId : Integer;
+  HouveErro : Boolean;
 
 implementation
 
@@ -69,15 +70,33 @@ begin
   frmMenu.cnnConexao.BeginTrans();
   qryAuxiliar.SQL.Text := 'INSERT INTO Empresas(Nome) VALUES(:nome)';
   qryAuxiliar.Parameters.ParamByName('nome').Value := edtNome.Text;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryEmpresas.Close();
-  qryEmpresas.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
-  edtId.Clear();
-  edtNome.Clear();
+  if HouveErro = false then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryEmpresas.Close();
+    qryEmpresas.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+    edtId.Clear();
+    edtNome.Clear();
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 procedure TfrmEmpresas.btnAlterarClick(Sender: TObject);
