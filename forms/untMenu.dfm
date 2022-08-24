@@ -13,6 +13,8 @@ object frmMenu: TfrmMenu
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 16
   object btnEmpresas: TBitBtn
@@ -22,6 +24,7 @@ object frmMenu: TfrmMenu
     Height = 25
     Caption = 'Empresas'
     TabOrder = 0
+    OnClick = btnEmpresasClick
   end
   object btnMotoristas: TBitBtn
     Left = 50
@@ -49,7 +52,6 @@ object frmMenu: TfrmMenu
     OnClick = btnFecharClick
   end
   object cnnConexao: TADOConnection
-    Connected = True
     ConnectionString = 
       'Provider=SQLOLEDB.1;Password=123;Persist Security Info=True;User' +
       ' ID=sa;Initial Catalog=Rodoviaria;Data Source=DANIEL-PC\MSSQL201' +
