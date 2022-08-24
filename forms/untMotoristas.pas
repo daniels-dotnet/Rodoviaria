@@ -104,6 +104,9 @@ begin
   ShowMessage('Operação executada com sucesso!');
   edtId.Clear();
   edtNome.Clear();
+  edtIdade.Clear();
+  edtSexo.Clear();
+  edtSalario.Clear();
 end;
 
 end.
