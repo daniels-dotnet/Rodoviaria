@@ -179,18 +179,36 @@ begin
   qryAuxiliar.Parameters.ParamByName('sexo').Value := edtSexo.Text;
   qryAuxiliar.Parameters.ParamByName('salario').Value := StrToFloat(edtSalario.Text);
   qryAuxiliar.Parameters.ParamByName('id').Value := MotoristaId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryMotoristas.Close();
-  qryMotoristas.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
-  edtId.Clear();
-  edtNome.Clear();
-  edtIdade.Clear();
-  edtSexo.Clear();
-  edtSalario.Clear();
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryMotoristas.Close();
+    qryMotoristas.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+    edtId.Clear();
+    edtNome.Clear();
+    edtIdade.Clear();
+    edtSexo.Clear();
+    edtSalario.Clear();
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 procedure TfrmMotoristas.btnExcluirClick(Sender: TObject);
