@@ -206,17 +206,35 @@ begin
   qryAuxiliar.Parameters.ParamByName('motoristaId').Value := MotoristaId;
   qryAuxiliar.Parameters.ParamByName('empresaId').Value := EmpresaId;
   qryAuxiliar.Parameters.ParamByName('id').Value := OnibusId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryOnibus.Close();
-  qryOnibus.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
+      ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
 
-  ShowMessage('Operação executada com sucesso!');
-  edtId.Clear();
-  edtTrajeto.Clear();
-  cmbMotorista.ItemIndex := -1;
-  cmbEmpresa.ItemIndex := -1;
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryOnibus.Close();
+    qryOnibus.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+    edtId.Clear();
+    edtTrajeto.Clear();
+    cmbMotorista.ItemIndex := -1;
+    cmbEmpresa.ItemIndex := -1;
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 procedure TfrmOnibus.btnExcluirClick(Sender: TObject);
