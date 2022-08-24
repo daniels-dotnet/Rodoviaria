@@ -153,13 +153,35 @@ begin
   frmMenu.cnnConexao.BeginTrans();
   qryAuxiliar.SQL.Text := 'DELETE FROM Empresas WHERE Id = :id';
   qryAuxiliar.Parameters.ParamByName('id').Value := EmpresaId;
-  qryAuxiliar.ExecSQL();
-  frmMenu.cnnConexao.CommitTrans();
 
-  qryEmpresas.Close();
-  qryEmpresas.Open();
+  try
+    qryAuxiliar.ExecSQL();
+    HouveErro := False;
+  except
+    on E:Exception do
+    begin
+      HouveErro := True;
 
-  ShowMessage('Operação executada com sucesso!');
+      if frmMenu.ErroBD(E.Message, 'FK_Onibus_Empresas') = 'Sim' then
+        ShowMessage('Impossível excluir pois existem Ônibus ligados a esta Empresa!')
+      else
+        ShowMessage('Ocorreu o seguinte erro: ' + E.Message);
+    end;
+  end;
+
+  if HouveErro = False then
+  begin
+    frmMenu.cnnConexao.CommitTrans();
+
+    qryEmpresas.Close();
+    qryEmpresas.Open();
+
+    ShowMessage('Operação executada com sucesso!');
+  end
+  else
+  begin
+    frmMenu.cnnConexao.RollbackTrans();
+  end;
 end;
 
 end.
