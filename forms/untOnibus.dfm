@@ -148,11 +148,20 @@ object frmOnibus: TfrmOnibus
   object btnSalvarAlteracoes: TBitBtn
     Left = 170
     Top = 70
-    Width = 150
+    Width = 145
     Height = 25
     Caption = 'Salvar Altera'#231#245'es'
     TabOrder = 8
     OnClick = btnSalvarAlteracoesClick
+  end
+  object btnExcluir: TBitBtn
+    Left = 320
+    Top = 70
+    Width = 75
+    Height = 25
+    Caption = 'Excluir'
+    TabOrder = 9
+    OnClick = btnExcluirClick
   end
   object qryOnibus: TADOQuery
     Connection = frmMenu.cnnConexao

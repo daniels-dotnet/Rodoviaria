@@ -28,6 +28,7 @@ type
     cmbEmpresa: TComboBox;
     btnAlterar: TBitBtn;
     btnSalvarAlteracoes: TBitBtn;
+    btnExcluir: TBitBtn;
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -36,6 +37,7 @@ type
     procedure cmbEmpresaChange(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnSalvarAlteracoesClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
   private
   public
   end;
@@ -196,6 +198,21 @@ begin
   edtTrajeto.Clear();
   cmbMotorista.ItemIndex := -1;
   cmbEmpresa.ItemIndex := -1;
+end;
+
+procedure TfrmOnibus.btnExcluirClick(Sender: TObject);
+begin
+  OnibusId := qryOnibus.FieldByName('Id').AsInteger;
+  frmMenu.cnnConexao.BeginTrans();
+  qryAuxiliar.SQL.Text := 'DELETE FROM Onibus WHERE Id = :id';
+  qryAuxiliar.Parameters.ParamByName('id').Value := OnibusId;
+  qryAuxiliar.ExecSQL();
+  frmMenu.cnnConexao.CommitTrans();
+
+  qryOnibus.Close();
+  qryOnibus.Open();
+
+  ShowMessage('Operação executada com sucesso!');
 end;
 
 end.
