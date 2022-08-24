@@ -31,12 +31,14 @@ type
     edtSalario: TEdit;
     btnAlterar: TBitBtn;
     btnSalvarAlteracoes: TBitBtn;
+    btnExcluir: TBitBtn;
     procedure btnFecharClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnInserirClick(Sender: TObject);
     procedure btnAlterarClick(Sender: TObject);
     procedure btnSalvarAlteracoesClick(Sender: TObject);
+    procedure btnExcluirClick(Sender: TObject);
   private
   public
   end;
@@ -170,6 +172,21 @@ begin
   edtIdade.Clear();
   edtSexo.Clear();
   edtSalario.Clear();
+end;
+
+procedure TfrmMotoristas.btnExcluirClick(Sender: TObject);
+begin
+  MotoristaId := qryMotoristas.FieldByName('Id').AsInteger;
+  frmMenu.cnnConexao.BeginTrans();
+  qryAuxiliar.SQL.Text := 'DELETE FROM Motoristas WHERE Id = :id';
+  qryAuxiliar.Parameters.ParamByName('id').Value := MotoristaId;
+  qryAuxiliar.ExecSQL();
+  frmMenu.cnnConexao.CommitTrans();
+
+  qryMotoristas.Close();
+  qryMotoristas.Open();
+
+  ShowMessage('Operação executada com sucesso!');
 end;
 
 end.

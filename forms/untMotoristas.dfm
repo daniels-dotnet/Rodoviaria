@@ -137,11 +137,20 @@ object frmMotoristas: TfrmMotoristas
   object btnSalvarAlteracoes: TBitBtn
     Left = 170
     Top = 40
-    Width = 150
+    Width = 145
     Height = 25
     Caption = 'Salvar Altera'#231#245'es'
     TabOrder = 9
     OnClick = btnSalvarAlteracoesClick
+  end
+  object btnExcluir: TBitBtn
+    Left = 320
+    Top = 40
+    Width = 75
+    Height = 25
+    Caption = 'Excluir'
+    TabOrder = 10
+    OnClick = btnExcluirClick
   end
   object qryMotoristas: TADOQuery
     Connection = frmMenu.cnnConexao
